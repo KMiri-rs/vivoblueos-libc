@@ -237,7 +237,7 @@ cfg_if! {
             })*) => ($(
                 #[inline]
                 $(#[$attr])*
-                pub unsafe extern fn $i($($arg: $argty),*
+                pub unsafe extern "C" fn $i($($arg: $argty),*
                 ) -> $ret {
                     $($body);*
                 }

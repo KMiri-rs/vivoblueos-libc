@@ -421,7 +421,7 @@ cfg_if! {
     } else if #[cfg(target_os = "blueos")] {
         // Not link to system's libc and libm, we're currently providing
         // BlueOS libc in another crate.
-        extern {}
+        extern "C" {}
     } else if #[cfg(target_env = "newlib")] {
         #[link(name = "c")]
         #[link(name = "m")]
@@ -1518,7 +1518,7 @@ cfg_if! {
 
 cfg_if! {
     if #[cfg(not(target_os = "redox"))] {
-        extern {
+        extern "C" {
             pub fn getsid(pid: pid_t) -> pid_t;
             #[cfg_attr(all(target_os = "macos", target_arch = "x86"),
                        link_name = "pause$UNIX2003")]
@@ -1557,7 +1557,7 @@ cfg_if! {
 
 cfg_if! {
     if #[cfg(target_os = "nto")] {
-        extern {
+        extern "C" {
             pub fn readlinkat(dirfd: ::c_int,
                 pathname: *const ::c_char,
                 buf: *mut ::c_char,
@@ -1578,7 +1578,7 @@ cfg_if! {
             ) -> ::c_int;
         }
     } else {
-        extern {
+        extern "C" {
             pub fn readlinkat(dirfd: ::c_int,
                 pathname: *const ::c_char,
                 buf: *mut ::c_char,
@@ -1619,7 +1619,7 @@ cfg_if! {
                     target_os = "illumos",
                     target_os = "nto",
                 )))] {
-        extern {
+        extern "C" {
             pub fn cfmakeraw(termios: *mut ::termios);
             pub fn cfsetspeed(termios: *mut ::termios,
                               speed: ::speed_t) -> ::c_int;
