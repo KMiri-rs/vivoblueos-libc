@@ -383,14 +383,14 @@ cfg_if! {
         #[link(name = "m", cfg(not(target_feature = "crt-static")))]
         #[link(name = "dl", cfg(not(target_feature = "crt-static")))]
         #[link(name = "c", cfg(not(target_feature = "crt-static")))]
-        extern {}
+        extern "C" {}
     } else if #[cfg(any(target_env = "musl", target_env = "ohos"))] {
         #[cfg_attr(feature = "rustc-dep-of-std",
                    link(name = "c", kind = "static", modifiers = "-bundle",
                         cfg(target_feature = "crt-static")))]
         #[cfg_attr(feature = "rustc-dep-of-std",
                    link(name = "c", cfg(not(target_feature = "crt-static"))))]
-        extern {}
+        extern "C" {}
     } else if #[cfg(target_os = "emscripten")] {
         // Don't pass -lc to Emscripten, it breaks. See:
         // https://github.com/emscripten-core/emscripten/issues/22758
@@ -401,7 +401,7 @@ cfg_if! {
             cfg(target_feature = "crt-static"))]
         #[link(name = "m", cfg(not(target_feature = "crt-static")))]
         #[link(name = "c", cfg(not(target_feature = "crt-static")))]
-        extern {}
+        extern "C" {}
     } else if #[cfg(any(target_os = "macos",
                         target_os = "ios",
                         target_os = "tvos",
@@ -413,11 +413,11 @@ cfg_if! {
                     ))] {
         #[link(name = "c")]
         #[link(name = "m")]
-        extern {}
+        extern "C" {}
     } else if #[cfg(target_os = "haiku")] {
         #[link(name = "root")]
         #[link(name = "network")]
-        extern {}
+        extern "C" {}
     } else if #[cfg(target_os = "blueos")] {
         // Not link to system's libc and libm, we're currently providing
         // BlueOS libc in another crate.
@@ -425,30 +425,30 @@ cfg_if! {
     } else if #[cfg(target_env = "newlib")] {
         #[link(name = "c")]
         #[link(name = "m")]
-        extern {}
+        extern "C" {}
     } else if #[cfg(target_env = "illumos")] {
         #[link(name = "c")]
         #[link(name = "m")]
-        extern {}
+        extern "C" {}
     } else if #[cfg(target_os = "redox")] {
         #[cfg_attr(feature = "rustc-dep-of-std",
                    link(name = "c", kind = "static", modifiers = "-bundle",
                         cfg(target_feature = "crt-static")))]
         #[cfg_attr(feature = "rustc-dep-of-std",
                    link(name = "c", cfg(not(target_feature = "crt-static"))))]
-        extern {}
+        extern "C" {}
     } else if #[cfg(target_os = "aix")] {
         #[link(name = "c")]
         #[link(name = "m")]
         #[link(name = "bsd")]
         #[link(name = "pthread")]
-        extern {}
+        extern "C" {}
     } else {
         #[link(name = "c")]
         #[link(name = "m")]
         #[link(name = "rt")]
         #[link(name = "pthread")]
-        extern {}
+        extern "C" {}
     }
 }
 
@@ -596,9 +596,13 @@ extern "C" {
 
     pub fn memchr(cx: *const c_void, c: c_int, n: size_t) -> *mut c_void;
     pub fn wmemchr(cx: *const wchar_t, c: wchar_t, n: size_t) -> *mut wchar_t;
+    #[allow(suspicious_runtime_symbol_definitions)]
     pub fn memcmp(cx: *const c_void, ct: *const c_void, n: size_t) -> c_int;
+    #[allow(suspicious_runtime_symbol_definitions)]
     pub fn memcpy(dest: *mut c_void, src: *const c_void, n: size_t) -> *mut c_void;
+    #[allow(suspicious_runtime_symbol_definitions)]
     pub fn memmove(dest: *mut c_void, src: *const c_void, n: size_t) -> *mut c_void;
+    #[allow(suspicious_runtime_symbol_definitions)]
     pub fn memset(dest: *mut c_void, c: c_int, n: size_t) -> *mut c_void;
 }
 
