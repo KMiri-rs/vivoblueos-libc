@@ -161,18 +161,18 @@ macro_rules! s_paren {
 // When 'const-extern-fn' is enabled, we emit the captured 'const' keyword
 // in the expanded function.
 //
-// When 'const-extern-fn' is disabled, we always emit a plain 'pub unsafe extern fn'.
+// When 'const-extern-fn' is disabled, we always emit a plain 'pub unsafe extern "C" fn'.
 // Note that the expression matched by the macro is exactly the same - this allows
 // users of this macro to work whether or not 'const-extern-fn' is enabled
 //
 // Unfortunately, we need to duplicate most of this macro between the 'cfg_if' blocks.
-// This is because 'const unsafe extern fn' won't even parse on older compilers,
+// This is because 'const unsafe extern "C" fn' won't even parse on older compilers,
 // so we need to avoid emitting it at all of 'const-extern-fn'.
 //
 // Specifically, moving the 'cfg_if' into the macro body will *not* work.
 // Doing so would cause the '#[cfg(feature = "const-extern-fn")]' to be emitted
 // into user code. The 'cfg' gate will not stop Rust from trying to parse the
-// 'pub const unsafe extern fn', so users would get a compiler error even when
+// 'pub const unsafe extern "C" fn', so users would get a compiler error even when
 // the 'const-extern-fn' feature is disabled
 //
 // Note that users of this macro need to place 'const' in a weird position
@@ -191,7 +191,7 @@ cfg_if! {
             })*) => ($(
                 #[inline]
                 $(#[$attr])*
-                pub $($constness)* unsafe extern fn $i($($arg: $argty),*
+                pub $($constness)* unsafe extern "C" fn $i($($arg: $argty),*
                 ) -> $ret {
                     $($body);*
                 }
@@ -206,7 +206,7 @@ cfg_if! {
             })*) => ($(
                 #[inline]
                 $(#[$attr])*
-                pub $($constness)* extern fn $i($($arg: $argty),*
+                pub $($constness)* extern "C" fn $i($($arg: $argty),*
                 ) -> $ret {
                     $($body);*
                 }
@@ -237,7 +237,7 @@ cfg_if! {
             })*) => ($(
                 #[inline]
                 $(#[$attr])*
-                pub unsafe extern fn $i($($arg: $argty),*
+                pub unsafe extern "C" fn $i($($arg: $argty),*
                 ) -> $ret {
                     $($body);*
                 }
@@ -252,7 +252,7 @@ cfg_if! {
             })*) => ($(
                 #[inline]
                 $(#[$attr])*
-                pub extern fn $i($($arg: $argty),*
+                pub extern "C" fn $i($($arg: $argty),*
                 ) -> $ret {
                     $($body);*
                 }
