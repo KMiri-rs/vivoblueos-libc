@@ -6,6 +6,8 @@ pub type wchar_t = u32;
 pub type c_long = i32;
 pub type c_ulong = u32;
 
+pub type Ioctl = ::c_ulong;
+
 pub type sigset_t = ::c_ulong;
 pub type timer_t = ::c_int;
 
