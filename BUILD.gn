@@ -1,4 +1,9 @@
 rust_library("libc") {
   crate_name = "libc"
   crate_root = "src/lib.rs"
+  rustflags = [
+    "--cfg",
+    "libc_union",
+    "-Amissing_abi",
+  ]
 }
